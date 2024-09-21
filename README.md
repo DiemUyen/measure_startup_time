@@ -4,7 +4,7 @@
 
 > The startup time refers to the time it takes for the app to become visible to users.
 
-In Flutter, you can write benchmark tests to measure and track the app's performance metrics such as track jank, startup time, etc. However, recording performance timelines isn't supported on web, you have to use browser's DevTools and emit your own events.
+In Flutter, you can write benchmark tests to measure and track the app's performance metrics such as track jank, startup time, etc. However, recording performance timelines isn't supported on web, you have to use the browser's DevTools and emit your own events.
 
 The `measure_startup_time` package was created to provide a more convenient way to record and use startup time metrics.
 
@@ -34,7 +34,7 @@ A normal web app has these common metrics:
 
   _In Flutter, this metric can be affected by any elements added into load event. These elements reduce the FCP time while no contentful widget has been rendered._
 
-- **LargestContentfulPaint - LCP**: the render time of the largest image or text block visible in the viewport, relative to when the user first navigated to the page.
+- **LargestContentfulPaint - LCP**: the render time of the largest image or text block visible in the viewport, relative to when the user first navigates to the page.
 
 ### Flutter metrics
 
@@ -69,7 +69,7 @@ void main() {
 
 ### Common metrics
 
-Common performance metrics are measured automatically, while other metrics are measured only upon you request.
+Common performance metrics are measured automatically, while others are only measured upon your request.
 
 ### Flutter metrics
 
@@ -130,7 +130,7 @@ When using Flutter metrics, you call this method and combine with related callba
 
 ### Custom metrics
 
-With custom metrics emitted from native web, invoke the `addMetric` method in `index.html` file; and with custom metrics emitted from Flutter, invoke the `measure` method of the `MeasureStartupTime` object, providing the target process and metric names.
+With custom metrics emitted from the native web, invoke the `addMetric` method in `index.html` file; and with custom metrics emitted from Flutter, invoke the `measure` method of the `MeasureStartupTime` object, providing the target process and metric names.
 
 ```dart
 MeasureStartupTime.measure(
@@ -138,8 +138,6 @@ MeasureStartupTime.measure(
     metric: 'fetch_data_start',
 );
 ```
-
-### Finish measure process
 
 To finish the measure running process, call `finishMeasure` method.
 
@@ -193,8 +191,8 @@ return StreamBuilder(
 
 ## Contributing
 
-Thanks for your interest in contributing! There are many ways to contribute to this project. Get started [here](/measure_startup_time/CONTRIBUTING.md)
+Thanks for your interest in contributing! There are many ways to contribute to this project. Get started [here](/CONTRIBUTING.md)
 
 ## License
 
-This package is available under [BSD-3-Clause](/measure_startup_time/LICENSE), meaning you are free use, modify, and distribute this code.
+This package is available under [BSD-3-Clause](/LICENSE), meaning you are free to use, modify, and distribute this code.
