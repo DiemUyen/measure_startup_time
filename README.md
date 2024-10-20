@@ -90,32 +90,23 @@ Flutter metrics are recorded using the `addMetric` method with a process name an
 </script>
 ```
 
-When using Flutter metrics, you call this method and combine with related callbacks:
+When using Flutter metrics, you call above method and combine with related callbacks:
 
 ```js
-<body>
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        }
-      }).then(function (engineInitializer) {
-        // get EntrypointLoad metric
-        addMetric('example_process', 'entrypointLoad');
-        return engineInitializer.initializeEngine();
-      }).then(function (appRunner) {
-        // get FlutterEngineInit metric
-        addMetric('example_process', 'flutterEngineInit');
-        return appRunner.runApp();
-      }).then(function (app) {
-        // get AppRun metric
-        addMetric('example_process', 'appRun');
-      });
-    });
-  </script>
-</body>
+_flutter.loader.load({
+  onEntrypointLoaded: async function(engineInitializer) {
+    // get EntrypointLoad metric
+    addMetric('example_process', 'entrypointLoad');
+
+    const appRunner = await engineInitializer.initializeEngine();
+    // get FlutterEngineInit metric
+    addMetric('example_process', 'flutterEngineInit');
+
+    await appRunner.runApp();
+    // get AppRun metric
+    addMetric('example_process', 'appRun');
+  }
+});
 ```
 
 ```js
@@ -134,8 +125,8 @@ With custom metrics emitted from the native web, invoke the `addMetric` method i
 
 ```dart
 MeasureStartupTime.measure(
-    process: exampleProcess,
-    metric: 'fetch_data_start',
+  process: exampleProcess,
+  metric: 'fetch_data_start',
 );
 ```
 
@@ -151,41 +142,41 @@ Performance metrics are returned as a `Stream<MeasurePerformance>` object. Each 
 
 ```dart
 return StreamBuilder(
-    stream: MeasureStartupTime.getMetrics(exampleProcess),
-    builder: (context, metricSnapshot) {
-        final metrics = metricSnapshot.data?.metrics.toList();
+  stream: MeasureStartupTime.getMetrics(exampleProcess),
+  builder: (context, metricSnapshot) {
+    final metrics = metricSnapshot.data?.metrics.toList();
 
-        return Padding(
-            padding: const EdgeInsets.all(16),
-            child: CustomScrollView(
-                slivers: [
-                    if (metrics != null) ...[
-                        SliverToBoxAdapter(
-                            child: Text(
-                                'Metrics',
-                                style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                        ),
-                        SliverList.separated(
-                            itemCount: metrics.length,
-                            separatorBuilder: (context, index) => const Divider(),
-                            itemBuilder: (context, index) {
-                                final metric = metrics[index];
-                                return ListTile(
-                                    title: Text(
-                                        metric.name,
-                                        style:
-                                            const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: Text('${metric.duration}ms'),
-                                );
-                            },
-                        ),
-                    ],
-                ],
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: CustomScrollView(
+        slivers: [
+          if (metrics != null) ...[
+            SliverToBoxAdapter(
+                child: Text(
+                    'Metrics',
+                    style: Theme.of(context).textTheme.titleLarge,
+                ),
             ),
-        );
-    },
+            SliverList.separated(
+              itemCount: metrics.length,
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: (context, index) {
+                final metric = metrics[index];
+                return ListTile(
+                  title: Text(
+                    metric.name,
+                    style:
+                        const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text('${metric.duration}ms'),
+                );
+              },
+            ),
+          ],
+        ],
+      ),
+    );
+  },
 );
 ```
 
